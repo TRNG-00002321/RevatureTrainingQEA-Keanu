@@ -1,9 +1,11 @@
+#prints a input n number of times
 def printRepeat(a, n):
     for i in range(n):
         print(a, end="")
 
     print("\n")
 
+#prints a and b separated by c
 def printRepeatWithSpaces(a,b,c):
     for i in range(a):
         print(a, end="")
@@ -15,6 +17,7 @@ def printRepeatWithSpaces(a,b,c):
 
     print("\n")
 
+#changes output depending on input type
 def variableTask(x):
     if type(x) == str:
         return print(x)
@@ -41,6 +44,7 @@ def division(x, y):
 def modulo(x, y):
     return x % y
 
+#swaps inputs
 def swap(a, b):
     temp = a
     a = b

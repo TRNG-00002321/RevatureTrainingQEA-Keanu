@@ -1,3 +1,4 @@
+#returns sum of all elements in a list
 def createList():
     list1 = [1, 2, 3, 4, 5]
     sum = 0
@@ -7,6 +8,7 @@ def createList():
 
     return sum
 
+#finds elements less than k and returns new list of those elements
 def findLessThan(k: int, arr: list):
     less_list = []
 
@@ -16,6 +18,7 @@ def findLessThan(k: int, arr: list):
 
     return less_list
 
+#returns average of elements in a list
 def findAverage(arr: list):
     total = 0
     count = 0
