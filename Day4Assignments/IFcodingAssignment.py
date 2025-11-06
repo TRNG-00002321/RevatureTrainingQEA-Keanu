@@ -22,7 +22,7 @@ class VendingMachine:
 
     def calculateCost(self, order):
 
-        #takes user input for cents
+        #takes user input for cents and casts to int
         quarters: int = int(input("Please enter your quarters: "))
         dimes: int = int(input("Please enter your dimes: "))
         nickles: int = int(input("Please enter your nickles: "))
