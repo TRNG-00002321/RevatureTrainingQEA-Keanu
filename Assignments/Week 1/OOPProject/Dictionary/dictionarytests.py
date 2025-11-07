@@ -1,4 +1,4 @@
-from dictionarymodule import *
+from Dictionary.dictionarymodule import *
 
 #1
 print("Test #1")

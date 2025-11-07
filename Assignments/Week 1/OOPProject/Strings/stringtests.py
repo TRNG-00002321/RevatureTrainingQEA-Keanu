@@ -1,4 +1,4 @@
-from stringmodule import *
+from Strings.stringmodule import *
 
 #1
 print("Test #1")

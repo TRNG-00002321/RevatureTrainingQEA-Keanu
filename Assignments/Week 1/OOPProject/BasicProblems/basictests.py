@@ -1,4 +1,4 @@
-from basicmodule import *
+from BasicProblems.basicmodule import *
 
 #Basic Problems tests
 

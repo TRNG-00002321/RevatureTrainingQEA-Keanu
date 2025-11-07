@@ -1,4 +1,4 @@
-from functionsmodule import *
+from Functions.functionsmodule import *
 
 #1
 print("Test #1")
