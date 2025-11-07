@@ -20,7 +20,7 @@ def RaiseSalaries(employees):
 
     raised_salaries = {}
     for employee in employees.values():
-        raised_salaries = dict
+        pass#raised_salaries
     #new_salaries = dict(map(lambda key: (key["salary"] * .1) += key["salary"], employees))
     return employees
 
