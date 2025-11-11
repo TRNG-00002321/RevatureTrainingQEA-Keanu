@@ -5,19 +5,13 @@
     <title>Subjects</title>
 </head>
 <body>
-<table border="3">
-    <tr>
-        <td>{{subject}}</td>
-        <td>{{mark}}</td>
-    </tr>
-    <tr>
-        <td>{{subject}}</td>
-        <td>{{mark}}</td>
-    </tr>
-    <tr>
-        <td>{{subject}}</td>
-        <td>{{mark}}</td>
-    </tr>
+<table border=1>
+         {% for key, value in subjects.items() %}
+            <tr>
+               <th> {{ key }} </th>
+               <td> {{ value }} </td>
+            </tr>
+         {% endfor %}
 </table>
 
 </body>

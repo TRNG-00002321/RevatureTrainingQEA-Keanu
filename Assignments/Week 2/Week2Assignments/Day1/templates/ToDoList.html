@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDoList</title>
+</head>
+<body>
+    <table border=1>
+        <tr>
+            <th>Tasks</th>
+            <th>Status</th>
+        </tr>
+         {% for task in tasklist %}
+            <tr>
+               <td> {{ task.Task }} </td>
+               <td> {{ task.Status }} </td>
+            </tr>
+         {% endfor %}
+    </table>
+
+    <form action="http://localhost:5000/add" method="post">
+        <p>Enter Task :</p>
+        <input type="text" name="task"/><br/>
+        <input type="submit" value="Submit"/><br/>
+    </form>
+        <form action="http://localhost:5000/update" method="post">
+        <p>Update Task :</p>
+        <input type="text" name="task"/><br/>
+        <input type="submit" value="Submit"/><br/>
+    </form>
+    <form action="http://localhost:5000/delete" method="post">
+        <p>Delete Task :</p>
+        <input type="text" name="task"/><br/>
+        <input type="submit" value="Submit"/><br/>
+    </form>
+</body>
+</html>
