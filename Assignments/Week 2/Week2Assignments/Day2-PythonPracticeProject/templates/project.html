@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Information</title>
+</head>
+<body>
+<h1>This is the project page</h1>
+
+    <form action="http://localhost:5000/">
+        <input type="submit" value="Home Page"/><br/>
+    </form>
+
+    <form action="http://localhost:5000/contact">
+        <input type="submit" value="Contact Info"/><br/>
+
+        <table border=1>
+        <tr>
+            <th>Project Name</th>
+            <th>Description</th>
+        </tr>
+         {% for project in projects %}
+            <tr>
+               <td> {{ project.ProjectName }} </td>
+               <td> {{ project.Description }} </td>
+            </tr>
+         {% endfor %}
+    </table>
+
+</body>
+</html>
