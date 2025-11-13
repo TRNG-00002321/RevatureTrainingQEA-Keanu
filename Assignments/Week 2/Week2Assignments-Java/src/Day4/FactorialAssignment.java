@@ -40,7 +40,5 @@ public class FactorialAssignment {
         num = scanner.nextInt();
 
         System.out.println("Factorial with recursion: " + factorial_recursive(num));
-
-
     }
 }
