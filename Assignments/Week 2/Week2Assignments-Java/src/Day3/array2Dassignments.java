@@ -126,3 +126,5 @@ public class array2Dassignments {
         print2Darray(array2DAdd(numbers, numbers2));
     }
 }
+
+//create a string " -Hello World!- "; assign a value hello world and try the methods
