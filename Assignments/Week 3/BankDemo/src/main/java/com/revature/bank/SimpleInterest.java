@@ -11,10 +11,3 @@ package com.revature.bank;
 public interface SimpleInterest {
     public double calculateInterest(double percentage);
 }
-
-//Assignment: Create a mini project to simulate employee management
-//There are 2 categories of employees - salaried and contractual employees
-//Salary is calculated based on the number of days present
-//For contractual employee it is based on number of hours worked
-//Salaried employees are provided with some benefits like food coupons
-//Declare variables and calculate salary
