@@ -14,14 +14,21 @@ public class CheckingAccount extends BankAccount{
     }
 
     @Override
-    public double withdraw(double amount) {
-        double surcharge = (amount * 0.01)/100;
-        amount += surcharge;
+    public double withdraw(double amount) throws InvalidAmountException, IllegalArgumentException {
 
-        double balance = super.getBalance();
-        balance -= amount;
-        super.setBalance(balance);
-        return balance;
+        if(amount < 5000)
+            throw new InvalidAmountException("Amount must be 5000 or more");
+        else if (amount < 0)
+            throw new IllegalArgumentException("Amount must be non-negative!!!");
+        else{
+            double surcharge = (amount * 0.01)/100;
+            amount += surcharge;
+
+            double balance = super.getBalance();
+            balance -= amount;
+            super.setBalance(balance);
+            return balance;
+        }
     }
 
 

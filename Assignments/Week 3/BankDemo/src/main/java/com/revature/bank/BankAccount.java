@@ -62,7 +62,11 @@ public abstract class BankAccount {
         this.balance = balance;
     }
 
-    public double deposit(double amount){
+    public double deposit(double amount) throws IllegalArgumentException{
+
+        if (amount < 0)
+            throw new IllegalArgumentException("Amount must be non-negative!!!");
+
         return balance += amount;
     }
 
