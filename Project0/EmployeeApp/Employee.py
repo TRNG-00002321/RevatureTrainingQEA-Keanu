@@ -64,9 +64,19 @@ class Employee:
         print(exp.to_string())
 
     def DeleteExpense(self):
+        #connect to expenses database
         conn = sql.connect("expenses.db")
 
+        #get expenses with employee id
         exp = pd.read_sql_query("SELECT * FROM expenses WHERE user_id == employee_id", conn)
+
+        #close connection to expenses database
+        conn.close()
+
+        #connect to approvals database
+        conn = sql.connect("approvals.db")
+
+
 
 
 
