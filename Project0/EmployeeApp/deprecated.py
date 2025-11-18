@@ -37,7 +37,7 @@ class Employee:
 
     @staticmethod
     def AddExpense(self):
-        conn = sql.connect("expenses.db")
+        conn = sql.connect("placeholder.db")
 
         #get user input for new expense
         amount = float(input("Enter your expense amount: "))
@@ -57,7 +57,7 @@ class Employee:
     def ViewExpenses(self):
 
         #connect to expenses database
-        conn = sql.connect("expenses.db")
+        conn = sql.connect("placeholder.db")
 
         #select expenses with a valid id
         exp = pd.read_sql_query("SELECT * FROM expenses WHERE user_id == employee_id", conn)
@@ -65,7 +65,7 @@ class Employee:
 
     def DeleteExpense(self):
         #connect to expenses database
-        conn = sql.connect("expenses.db")
+        conn = sql.connect("placeholder.db")
 
         #get expenses with employee id
         exp = pd.read_sql_query("SELECT * FROM expenses WHERE user_id == employee_id", conn)
