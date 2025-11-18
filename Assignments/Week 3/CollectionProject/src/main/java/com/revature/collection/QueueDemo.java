@@ -22,6 +22,5 @@ public class QueueDemo {
         System.out.println(myQ);
 
         System.out.println("First element: " + myQ.poll());
-
     }
 }

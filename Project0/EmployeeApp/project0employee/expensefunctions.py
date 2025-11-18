@@ -94,11 +94,13 @@ def EditExpense(user_id):
         WHERE expenses.id=? AND user_id=? AND approvals.status='pending'
     """, (expense_id, user_id))
 
+    #checks if any pending expenses were found
     if not c.fetchone():
         print("No editable pending expense found with that ID.")
         conn.close()
         return
 
+    #tries to get new amount from user input
     try:
         new_amount = float(input("New Amount: "))
     except ValueError:
@@ -106,8 +108,10 @@ def EditExpense(user_id):
         conn.close()
         return
 
+    #gets new description from user input
     new_description = input("New Description: ")
 
+    #updates expenses with new amount and description
     c.execute("""
         UPDATE expenses
         SET amount=?, description=?
@@ -117,3 +121,36 @@ def EditExpense(user_id):
     conn.commit()
     conn.close()
     print("Expense updated successfully!")
+
+def DeleteExpense(user_id):
+
+    #Get expense id for deletion
+    print("\n=== Delete Pending Expense ===")
+    expense_id = input("Expense ID to delete: ")
+
+    #connect to database
+    conn = sqlite3.connect(database.DB_PATH)
+    c = conn.cursor()
+
+    # Check ownership & pending
+    c.execute("""
+        SELECT expenses.id
+        FROM expenses
+        JOIN approvals ON expenses.id = approvals.expense_id
+        WHERE expenses.id=? AND user_id=? AND approvals.status='pending'
+    """, (expense_id, user_id))
+
+    #checks if any pending expenses were found
+    if not c.fetchone():
+        print("No pending expenses found with that ID.")
+        conn.close()
+        return
+
+    #delete expenses that have expense id
+    c.execute("""
+        DELETE FROM expenses WHERE expenses.id=?
+    """, expense_id)
+
+    #insert logging here
+    conn.commit()
+    conn.close()
