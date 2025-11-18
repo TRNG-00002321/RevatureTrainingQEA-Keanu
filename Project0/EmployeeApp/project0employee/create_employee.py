@@ -1,8 +1,10 @@
 import sqlite3
+from project0employee import database
+
 
 def create_employee():
     #Connects to database
-    conn = sqlite3.connect('employee.db')
+    conn = sqlite3.connect(database.DB_PATH)
     c = conn.cursor()
 
     #make sure username is unique username######################

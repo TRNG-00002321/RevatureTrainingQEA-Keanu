@@ -72,8 +72,8 @@ def ViewExpenses(user_id):
     else:
         #Print out all rows
         for row in rows:
-            print(f"\nID: {row[0]}\nAmount: {row[1]}\nDescription: {row[2]}\n"
-                  f"Date: {row[3]}\nStatus: {row[4]}")
+            print(f"\nID: {row[0]} | Amount: {row[1]} | Description: {row[2]} | "
+                  f"Date: {row[3]} | Status: {row[4]}")
 
 
 def EditExpense(user_id):
@@ -136,7 +136,7 @@ def DeleteExpense(user_id):
     c.execute("""
         SELECT expenses.id
         FROM expenses
-        JOIN approvals ON expenses.id = approvals.expense_id
+            JOIN approvals ON expenses.id = approvals.expense_id
         WHERE expenses.id=? AND user_id=? AND approvals.status='pending'
     """, (expense_id, user_id))
 
@@ -146,11 +146,42 @@ def DeleteExpense(user_id):
         conn.close()
         return
 
-    #delete expenses that have expense id
-    c.execute("""
-        DELETE FROM expenses WHERE expenses.id=?
-    """, expense_id)
+    #delete expenses that have expense id from approvals and expenses tables
+    c.execute("DELETE FROM approvals WHERE expense_id=?", expense_id)
+    c.execute("DELETE FROM expenses WHERE id=?", expense_id)
 
     #insert logging here
     conn.commit()
     conn.close()
+
+def ViewExpenseHistory(user_id):
+    print("\n=== View Expense History ===")
+
+    #connects to database
+    conn = sqlite3.connect(database.DB_PATH)
+    c = conn.cursor()
+
+    #Selects rows that from expenses that are not pending
+    c.execute("""
+        SELECT expenses.id, amount, description, expenses.date, approvals.status
+        FROM expenses
+            JOIN approvals ON expenses.id = approvals.expense_id
+            WHERE user_id=? AND approvals.status != 'pending'
+            ORDER BY expenses.date
+    """, (user_id,))
+
+    #gets rows list
+    rows = c.fetchall()
+    conn.close()
+
+    #if no rows found then return
+    if not rows:
+        print("No expense history found.")
+        return
+
+    #print each expense row to the screen
+    for row in rows:
+        print(f"\nID: {row[0]} | Amount: {row[1]} | Description: {row[2]} | "
+              f"Date: {row[3]} | Status: {row[4]}")
+
+

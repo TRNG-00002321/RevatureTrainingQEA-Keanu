@@ -1,4 +1,3 @@
-import getpass
 import sqlite3
 import database
 
@@ -11,7 +10,7 @@ def login():
     #login interface
     print("\n=== Login ===")
     username = input("Username: ")
-    password = getpass.getpass("Password: ")
+    password = input("Password: ")
 
     #connect to database
     conn = sqlite3.connect(database.DB_PATH)
@@ -28,4 +27,4 @@ def login():
         return user[0]  # return user_id
     else:
         print("Invalid login!")
-        return None
+        return False
