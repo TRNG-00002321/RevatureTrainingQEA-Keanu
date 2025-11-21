@@ -34,6 +34,7 @@ def AddExpense(user_id):
             "INSERT INTO expenses (user_id, amount, description, date) VALUES (?, ?, ?, ?)",
             (user_id, amount, description, date)
         )
+        logger.info("Expense added successfully!")
     except sqlite3.IntegrityError:
         logger.error("Database query error")
         print("Amount must be > $500.")
@@ -51,6 +52,7 @@ def AddExpense(user_id):
             "INSERT INTO approvals (expense_id, status, reviewer, comment, review_date) VALUES (?, ?, ?, ?, ?)",
             (expense_id, "pending", None, None, None)
         )
+        logger.info("Approval added successfully!")
     except sqlite3.IntegrityError:
         logger.error("Database query error")
         conn.close()
@@ -60,7 +62,6 @@ def AddExpense(user_id):
     conn.commit()
     conn.close()
     print("Expense added successfully.")
-    logger.info("Expense added to database")
 
 ###################################################################################################
 
@@ -71,14 +72,20 @@ def ViewExpenses(user_id):
     conn = sqlite3.connect(database.DB_PATH)
     c = conn.cursor()
 
-    #select rows from expenses joined with approval status
-    c.execute("""
-              SELECT expenses.id, amount, description, expenses.date, approvals.status
-              FROM expenses
-                  JOIN approvals
-              ON expenses.id = approvals.expense_id
-              WHERE user_id=?
-              """, (user_id,))
+    try:
+        #select rows from expenses joined with approval status
+        c.execute("""
+                SELECT expenses.id, amount, description, expenses.date, approvals.status
+                FROM expenses
+                    JOIN approvals
+                ON expenses.id = approvals.expense_id
+                WHERE user_id=?
+                """, (user_id,))
+        logger.info("Database query successful")
+    except sqlite3.IntegrityError:
+        logger.error("Database query error")
+        conn.close()
+        return
 
     #Get all rows
     rows = c.fetchall()
@@ -113,12 +120,19 @@ def EditExpense(user_id):
     c = conn.cursor()
 
     # Check ownership & pending
-    c.execute("""
-        SELECT expenses.id
-        FROM expenses
-        JOIN approvals ON expenses.id = approvals.expense_id
-        WHERE expenses.id=? AND user_id=? AND approvals.status='pending'
-    """, (expense_id, user_id))
+    try:
+        c.execute("""
+            SELECT expenses.id
+            FROM expenses
+            JOIN approvals ON expenses.id = approvals.expense_id
+            WHERE expenses.id=? AND user_id=? AND approvals.status='pending'
+        """, (expense_id, user_id))
+
+        logger.info("Database query successful")
+    except sqlite3.DatabaseError:
+        logger.error("Database query error")
+        conn.close()
+        return
 
     #checks if any pending expenses were found
     if not c.fetchone():
@@ -137,12 +151,17 @@ def EditExpense(user_id):
     #gets new description from user input
     new_description = input("New Description: ")
 
-    #updates expenses with new amount and description
-    c.execute("""
-        UPDATE expenses
-        SET amount=?, description=?
-        WHERE id=?
-    """, (new_amount, new_description, expense_id))
+    try:
+        #updates expenses with new amount and description
+        c.execute("""
+            UPDATE expenses
+            SET amount=?, description=?
+            WHERE id=?
+        """, (new_amount, new_description, expense_id))
+    except sqlite3.DatabaseError:
+        logger.error("Database query error")
+        conn.close()
+        return
 
     conn.commit()
     conn.close()
@@ -158,13 +177,19 @@ def DeleteExpense(user_id):
     conn = sqlite3.connect(database.DB_PATH)
     c = conn.cursor()
 
-    # Check ownership & pending
-    c.execute("""
-        SELECT expenses.id
-        FROM expenses
-            JOIN approvals ON expenses.id = approvals.expense_id
-        WHERE expenses.id=? AND user_id=? AND approvals.status='pending'
-    """, (expense_id, user_id))
+    try:
+        # Check ownership & pending
+        c.execute("""
+            SELECT expenses.id
+            FROM expenses
+                JOIN approvals ON expenses.id = approvals.expense_id
+            WHERE expenses.id=? AND user_id=? AND approvals.status='pending'
+        """, (expense_id, user_id))
+        logger.info("Database query successful")
+    except sqlite3.DatabaseError:
+        logger.error("Database query error")
+        conn.close()
+        return
 
     #checks if any pending expenses were found
     if not c.fetchone():
@@ -172,11 +197,16 @@ def DeleteExpense(user_id):
         conn.close()
         return
 
-    #delete expenses that have expense id from approvals and expenses tables
-    c.execute("DELETE FROM approvals WHERE expense_id=?", expense_id)
-    c.execute("DELETE FROM expenses WHERE id=?", expense_id)
+    try:
+        #delete expenses that have expense id from approvals and expenses tables
+        c.execute("DELETE FROM approvals WHERE expense_id=?", expense_id)
+        c.execute("DELETE FROM expenses WHERE id=?", expense_id)
+        logger.info("Database query successful")
+    except sqlite3.DatabaseError:
+        logger.error("Database query error")
+        conn.close()
+        return
 
-    #insert logging here
     conn.commit()
     conn.close()
 
@@ -187,14 +217,20 @@ def ViewExpenseHistory(user_id):
     conn = sqlite3.connect(database.DB_PATH)
     c = conn.cursor()
 
-    #Selects rows that from expenses that are not pending
-    c.execute("""
-        SELECT expenses.id, amount, description, expenses.date, approvals.status
-        FROM expenses
-            JOIN approvals ON expenses.id = approvals.expense_id
-            WHERE user_id=? AND approvals.status != 'pending'
-            ORDER BY expenses.date
-    """, (user_id,))
+    try:
+        #Selects rows that from expenses that are not pending
+        c.execute("""
+            SELECT expenses.id, amount, description, expenses.date, approvals.status
+            FROM expenses
+                JOIN approvals ON expenses.id = approvals.expense_id
+                WHERE user_id=? AND approvals.status != 'pending'
+                ORDER BY expenses.date
+        """, (user_id,))
+        logger.info("Database query successful")
+    except sqlite3.DatabaseError:
+        logger.error("Database query error")
+        conn.close()
+        return
 
     #gets rows list
     rows = c.fetchall()
