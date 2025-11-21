@@ -8,13 +8,12 @@ def menu(user_id):
 
         #Print main menu to screen
         print("\n====== Employee Menu ======")
-        print("1. Create New Employee Account")
-        print("2. Add Expense")
-        print("3. Edit Expense")
-        print("4. Delete Expense")
-        print("5. View Expenses")
-        print("6. View Expense History")
-        print("7. Exit")
+        print("1. Add Expense")
+        print("2. Edit Expense")
+        print("3. Delete Expense")
+        print("4. View Expenses")
+        print("5. View Denied/Approved Expense History")
+        print("6. Exit")
 
         #get user input
         option = int(input("Select an option: "))
@@ -22,18 +21,16 @@ def menu(user_id):
         #match statement for options
         match option:
             case 1:
-                create_employee()
-            case 2:
                 AddExpense(user_id)
-            case 3:
+            case 2:
                 EditExpense(user_id)
-            case 4:
+            case 3:
                 DeleteExpense(user_id)
-            case 5:
+            case 4:
                 ViewExpenses(user_id)
-            case 6:
+            case 5:
                 ViewExpenseHistory(user_id)
-            case 7:
+            case 6:
                 print("Logging out...")
                 break
             case _:

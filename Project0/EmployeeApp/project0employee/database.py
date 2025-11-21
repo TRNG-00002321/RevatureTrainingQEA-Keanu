@@ -15,9 +15,9 @@ def init_db():
     c.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY,
-            username TEXT UNIQUE,
-            password TEXT,
-            role TEXT
+            username VARCHAR(100) UNIQUE,
+            password VARCHAR(100),
+            role VARCHAR(20)
         )
     """)
 
@@ -26,8 +26,8 @@ def init_db():
         CREATE TABLE IF NOT EXISTS expenses (
             id INTEGER PRIMARY KEY,
             user_id INTEGER,
-            amount REAL,
-            description TEXT,
+            amount REAL CHECK ( amount > 500 ),
+            description VARCHAR(100),
             date TEXT,
             FOREIGN KEY (user_id) REFERENCES users(id)
         )
@@ -53,9 +53,9 @@ def init_db():
     if not c.fetchall():
         c.execute(
             "INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
-            ("employee1", "password123", "employee")
+            ("test", "pass", "employee")
         )
-        print("Created default user: employee1 / password123")
+        print("Created default user: test / pass")
 
     conn.commit()
     conn.close()

@@ -1,6 +1,7 @@
 import sqlite3
 import database
 import datetime
+import pandas as pd
 
 #-------------------------
 # Expense Functions
@@ -71,9 +72,16 @@ def ViewExpenses(user_id):
         return
     else:
         #Print out all rows
-        for row in rows:
-            print(f"\nID: {row[0]} | Amount: {row[1]} | Description: {row[2]} | "
-                  f"Date: {row[3]} | Status: {row[4]}")
+        pd.set_option('display.max_columns', None)
+
+        # Show all rows
+        pd.set_option('display.max_rows', None)
+
+        column_names = ["ID", "Amount", "Description", "Date", "Status"]
+        df = pd.DataFrame(rows, columns=column_names).set_index('ID')
+        df.sort_values(by=['Date'], inplace=True)
+
+        print(df)
 
 
 def EditExpense(user_id):
