@@ -8,15 +8,15 @@ def pre_login():
         print("\n====== Employee Menu ======")
         print("1. Login")
         print("2. Create New Employee Account")
+        print("3. Exit")
 
         choice = int(input("Enter your choice: "))
 
         if choice == 1:
-            break
+            return True
         elif choice == 2:
             create_employee()
+        elif choice == 3:
+            return False
         else:
             print("Invalid choice. Please try again.")
-
-
-    return False
