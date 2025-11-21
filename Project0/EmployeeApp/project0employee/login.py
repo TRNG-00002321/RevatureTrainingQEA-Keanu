@@ -1,5 +1,7 @@
 import sqlite3
 import database
+import logging
+logger = logging.getLogger(__name__)
 
 #------------------------
 # Login function
@@ -24,7 +26,9 @@ def login():
     #Returns user id if successful
     if user:
         print(f"\nWelcome, {user[1]}!")
+        logger.info(f"User {user[1]} logged in")
         return user[0]  # return user_id
     else:
+        logger.error("Failed to log in")
         print("Invalid login!")
         return False

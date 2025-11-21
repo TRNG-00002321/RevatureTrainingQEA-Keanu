@@ -1,6 +1,6 @@
-from project0employee.create_employee import create_employee
 from project0employee.expensefunctions import AddExpense, EditExpense, DeleteExpense, ViewExpenses, ViewExpenseHistory
-
+import logging
+logger = logging.getLogger(__name__)
 
 #Main menu for the python employee program
 def menu(user_id):
@@ -31,9 +31,11 @@ def menu(user_id):
             case 5:
                 ViewExpenseHistory(user_id)
             case 6:
+                logger.info("Exiting...")
                 print("Logging out...")
                 break
             case _:
+                logger.warning("Invalid option input.")
                 print("Invalid option!")
 
     return False

@@ -2,6 +2,8 @@ import sqlite3
 import database
 import datetime
 import pandas as pd
+import logging
+logger = logging.getLogger(__name__)
 
 #-------------------------
 # Expense Functions
@@ -12,6 +14,7 @@ def AddExpense(user_id):
     try:
         amount = float(input("Amount: "))
     except ValueError:
+        logger.error("Invalid expense amount.")
         print("Invalid amount.")
         return
 
@@ -26,23 +29,38 @@ def AddExpense(user_id):
     c = conn.cursor()
 
     #create new expense and insert into table
-    c.execute(
-        "INSERT INTO expenses (user_id, amount, description, date) VALUES (?, ?, ?, ?)",
-        (user_id, amount, description, date)
-    )
+    try:
+        c.execute(
+            "INSERT INTO expenses (user_id, amount, description, date) VALUES (?, ?, ?, ?)",
+            (user_id, amount, description, date)
+        )
+    except sqlite3.IntegrityError:
+        logger.error("Database query error")
+        print("Amount must be > $500.")
+        conn.close()
+        return
+
+
 
     #gets newly added expense id
     expense_id = c.lastrowid
 
     #create pending approval in approvals table
-    c.execute(
-        "INSERT INTO approvals (expense_id, status, reviewer, comment, review_date) VALUES (?, ?, ?, ?, ?)",
-        (expense_id, "pending", None, None, None)
-    )
+    try:
+        c.execute(
+            "INSERT INTO approvals (expense_id, status, reviewer, comment, review_date) VALUES (?, ?, ?, ?, ?)",
+            (expense_id, "pending", None, None, None)
+        )
+    except sqlite3.IntegrityError:
+        logger.error("Database query error")
+        conn.close()
+        return
+
 
     conn.commit()
     conn.close()
     print("Expense added successfully.")
+    logger.info("Expense added to database")
 
 ###################################################################################################
 
@@ -187,9 +205,15 @@ def ViewExpenseHistory(user_id):
         print("No expense history found.")
         return
 
-    #print each expense row to the screen
-    for row in rows:
-        print(f"\nID: {row[0]} | Amount: {row[1]} | Description: {row[2]} | "
-              f"Date: {row[3]} | Status: {row[4]}")
+    # Print out all rows
+    pd.set_option('display.max_columns', None)
+    # Show all rows
+    pd.set_option('display.max_rows', None)
+
+    column_names = ["ID", "Amount", "Description", "Date", "Status"]
+    df = pd.DataFrame(rows, columns=column_names).set_index('ID')
+    df.sort_values(by=['Date'], inplace=True)
+
+    print(df)
 
 

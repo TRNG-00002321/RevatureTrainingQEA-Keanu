@@ -1,5 +1,8 @@
 import sqlite3
+import logging
 from project0employee import database
+
+logger = logging.getLogger(__name__)
 
 
 def create_employee():
@@ -23,9 +26,11 @@ def create_employee():
 
         conn.commit()
         conn.close()
+        logger.info('User created successfully')
     except sqlite3.IntegrityError:
         #throw an exception if username exists in table
         print("Username already exists!")
+        logger.error('User creation failed')
         conn.close()
         return
 
