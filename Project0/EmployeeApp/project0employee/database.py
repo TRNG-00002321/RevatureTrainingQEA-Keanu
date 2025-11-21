@@ -1,11 +1,16 @@
+import logging
 import sqlite3
+import os
 
 #absolute path to database file
+#dir_path = os.path.dirname(os.path.realpath(__file__))
+#os.path.join(dir_path, "expenses.db")
 DB_PATH = r"C:\Users\Owner\OneDrive\Desktop\RevatureTrainingQEA-Keanu\Project0\Database\expenses.db"
 
 # -------------------------------
 # Database Initialization
 # -------------------------------
+logger = logging.getLogger(__name__)
 
 def init_db():
     conn = sqlite3.connect(DB_PATH)
@@ -55,10 +60,12 @@ def init_db():
             "INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
             ("test", "pass", "employee")
         )
-        print("Created default user: test / pass")
+        logger.info("Creating default user: test / pass")
 
     conn.commit()
     conn.close()
+
+    logger.info("Database created successfully")
 
 #Testing database creation######################
 #def main():
