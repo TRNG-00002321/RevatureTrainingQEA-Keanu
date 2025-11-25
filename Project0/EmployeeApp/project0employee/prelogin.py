@@ -1,5 +1,8 @@
 from project0employee.create_employee import create_employee
 
+#---------------------------------
+# Pre-login start up screen
+#---------------------------------
 
 def pre_login():
     while True:
