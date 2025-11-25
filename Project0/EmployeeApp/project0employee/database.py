@@ -65,7 +65,7 @@ def init_db():
     conn.commit()
     conn.close()
 
-    logger.info("Database created successfully")
+    logger.info("Database initialized successfully")
 
 #Testing database creation######################
 #def main():

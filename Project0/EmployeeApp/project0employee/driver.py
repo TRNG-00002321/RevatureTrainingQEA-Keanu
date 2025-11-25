@@ -16,7 +16,7 @@ def main():
 
     while running:
 
-        if(pre_login() == False):
+        if pre_login() == False:
             break
 
         user_id = int(login())

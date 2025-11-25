@@ -96,18 +96,18 @@ def ViewExpenses(user_id):
         print("No expenses found.")
         return
     else:
-        #Print out all rows
+        #print out all columns
         pd.set_option('display.max_columns', None)
 
-        # Show all rows
+        #print out all rows
         pd.set_option('display.max_rows', None)
 
+        #display all rows as a dataframe
         column_names = ["ID", "Amount", "Description", "Date", "Status"]
         df = pd.DataFrame(rows, columns=column_names).set_index('ID')
         df.sort_values(by=['Date'], inplace=True)
 
         print(df)
-
 
 def EditExpense(user_id):
 
@@ -119,7 +119,7 @@ def EditExpense(user_id):
     conn = sqlite3.connect(database.DB_PATH)
     c = conn.cursor()
 
-    # Check ownership & pending
+    #check ownership & pending
     try:
         c.execute("""
             SELECT expenses.id
@@ -178,7 +178,7 @@ def DeleteExpense(user_id):
     c = conn.cursor()
 
     try:
-        # Check ownership & pending
+        #check ownership & pending
         c.execute("""
             SELECT expenses.id
             FROM expenses
@@ -241,11 +241,12 @@ def ViewExpenseHistory(user_id):
         print("No expense history found.")
         return
 
-    # Print out all rows
+    #print out all columns
     pd.set_option('display.max_columns', None)
-    # Show all rows
+    #print out all rows
     pd.set_option('display.max_rows', None)
 
+    #display rows as dataframe
     column_names = ["ID", "Amount", "Description", "Date", "Status"]
     df = pd.DataFrame(rows, columns=column_names).set_index('ID')
     df.sort_values(by=['Date'], inplace=True)
