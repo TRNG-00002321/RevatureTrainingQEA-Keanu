@@ -2,6 +2,7 @@ package com.revature.daodemo.dao;
 
 import com.revature.daodemo.model.Contacts;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ContactDAO {
@@ -9,7 +10,7 @@ public interface ContactDAO {
         System.out.println("Default");
         return null;
     }
-    public default Contacts getContact(int id){
+    public default Contacts getContact(int id) throws SQLException {
         return null;
     }
     public default void save(Contacts contacts){}

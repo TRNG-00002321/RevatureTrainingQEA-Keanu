@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class ContactsJDBCImpl implements ContactDAO{
     Connection connection = null;
 
-    public Contacts getContact(int id) {
+    public Contacts getContact(int id) throws SQLException {
         connection = ConnectionUtil.dbConnection();
         Contacts contacts = null;
 
@@ -22,7 +22,7 @@ public class ContactsJDBCImpl implements ContactDAO{
         ResultSet resultSet = preparedStatement.executeQuery();
 
         while(resultSet.next()){
-            contacts = new Contacts(resultSet.getInt(1), resultSet.getString(2)
+            contacts = new Contacts(resultSet.getString(1), resultSet.getString(2)
             , resultSet.getString(3));
         }
 

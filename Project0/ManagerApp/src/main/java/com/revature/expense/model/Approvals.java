@@ -20,6 +20,14 @@ public class Approvals {
         this.review_date = review_date;
     }
 
+    public Approvals(int expense_id, String status, int reviewer, String comment, String review_date) {
+        this.expense_id = expense_id;
+        this.status = status;
+        this.reviewer = reviewer;
+        this.comment = comment;
+        this.review_date = review_date;
+    }
+
     public int getId() {
         return id;
     }
