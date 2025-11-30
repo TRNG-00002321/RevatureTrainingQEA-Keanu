@@ -36,8 +36,8 @@ def AddExpense(user_id):
             (user_id, amount, description, date)
         )
         logger.info("Expense added successfully!")
-    except sqlite3.IntegrityError:
-        logger.error("Database query error")
+    except mysql.connector.errors.Error as e:
+        logger.error("Database query error", e.msg)
         print("Amount must be > $500.")
         return
 
