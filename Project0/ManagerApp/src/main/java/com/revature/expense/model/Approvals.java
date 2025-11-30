@@ -1,17 +1,19 @@
 package com.revature.expense.model;
 
+import java.time.LocalDateTime;
+
 public class Approvals {
-    private int id;                 //Primary Key
-    private int expense_id;         //Foreign Key to expenses
-    private String status;          //pending,approved,denied
-    private int reviewer;           //Manager user id(null if not reviewed yet)
-    private String comment;         //Feedback from manager
-    private String review_date;     //Date review decision was made
+    private int id;                        //Primary Key
+    private int expense_id;                //Foreign Key to expenses
+    private String status;                 //pending,approved,denied
+    private int reviewer;                  //Manager user id(null if not reviewed yet)
+    private String comment;                //Feedback from manager
+    private LocalDateTime review_date;     //Date review decision was made
 
     public Approvals() {
     }
 
-    public Approvals(int id, int expense_id, String status, int reviewer, String comment, String review_date) {
+    public Approvals(int id, int expense_id, String status, int reviewer, String comment, LocalDateTime review_date) {
         this.id = id;
         this.expense_id = expense_id;
         this.status = status;
@@ -20,7 +22,7 @@ public class Approvals {
         this.review_date = review_date;
     }
 
-    public Approvals(int expense_id, String status, int reviewer, String comment, String review_date) {
+    public Approvals(int expense_id, String status, int reviewer, String comment, LocalDateTime review_date) {
         this.expense_id = expense_id;
         this.status = status;
         this.reviewer = reviewer;
@@ -68,11 +70,11 @@ public class Approvals {
         this.comment = comment;
     }
 
-    public String getReview_date() {
+    public LocalDateTime getReview_date() {
         return review_date;
     }
 
-    public void setReview_date(String review_date) {
+    public void setReview_date(LocalDateTime review_date) {
         this.review_date = review_date;
     }
 

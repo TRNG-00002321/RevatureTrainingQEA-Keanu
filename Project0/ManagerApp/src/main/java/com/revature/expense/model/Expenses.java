@@ -1,18 +1,18 @@
 package com.revature.expense.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Expenses {
     private int id;                 //Primary Key
     private int user_id;            //Foreign Key to users
     private double amount;          //Expense amount(must be at least $500
     private String description;     //Reason for expense request
-    private String date;            //Date of expense
+    private LocalDateTime date;     //Date of expense
 
     public Expenses() {
     }
 
-    public Expenses(int id, int user_id, double amount, String description, String date) {
+    public Expenses(int id, int user_id, double amount, String description, LocalDateTime date) {
         this.id = id;
         this.user_id = user_id;
         this.amount = amount;
@@ -20,7 +20,7 @@ public class Expenses {
         this.date = date;
     }
 
-    public Expenses(int user_id, double amount, String description, String date) {
+    public Expenses(int user_id, double amount, String description, LocalDateTime date) {
         this.user_id = user_id;
         this.amount = amount;
         this.description = description;
@@ -59,11 +59,11 @@ public class Expenses {
         this.description = description;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

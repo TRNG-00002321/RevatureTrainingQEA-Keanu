@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public interface UsersDAO {
 
-    public void addUser(String username, String password) throws SQLException;
+    public void addUser(String username, String password);
     public Users login(String username, String password);
 
 }

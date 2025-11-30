@@ -3,9 +3,12 @@ package com.revature.expense.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class ConnectionUtil {
     private static Connection connection;
@@ -18,6 +21,16 @@ public class ConnectionUtil {
         String url = "";
         String user = "";
         String password = "";
+        Properties prop = new Properties();
+
+        try(FileInputStream config = new FileInputStream("src/main/resources/config.properties")){
+            prop.load(config);
+            url = prop.getProperty("database.url");
+            user = prop.getProperty("database.username");
+            password = prop.getProperty("database.password");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //connect to database
         try{
