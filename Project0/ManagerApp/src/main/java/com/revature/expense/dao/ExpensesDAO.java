@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ExpensesDAO {
     public List<Expenses> getPendingExpenses();
-    public void denyExpense(int id, int manager_id, String comment);
-    public void approveExpense(int id, int manager_id, String comment);
+    public void denyExpense(int expense_id, int manager_id, String comment);
+    public void approveExpense(int expense_id, int manager_id, String comment);
 }

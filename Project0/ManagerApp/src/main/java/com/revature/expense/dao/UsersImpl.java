@@ -35,6 +35,7 @@ public class UsersImpl implements UsersDAO{
             preparedStatement.execute();
             preparedStatement.close();
         }catch (SQLException e){
+            System.out.println("Account creation failed!");
             logger.error("User not found:{}", e.getMessage());
         }
     }
