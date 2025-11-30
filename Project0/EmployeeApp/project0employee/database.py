@@ -1,11 +1,14 @@
 import logging
 import sqlite3
-import os
+import mysql.connector
 
 #absolute path to database file
 #dir_path = os.path.dirname(os.path.realpath(__file__))
 #os.path.join(dir_path, "expenses.db")
 DB_PATH = r"C:\Users\Owner\OneDrive\Desktop\RevatureTrainingQEA-Keanu\Project0\Database\expenses.db"
+
+#Database connection with mysql
+DB_Connection = mysql.connector.connect(host="127.0.0.1",port="3306", user="root", password="ppp444", database="expensesDB")
 
 # -------------------------------
 # Database Initialization

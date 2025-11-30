@@ -1,5 +1,8 @@
 import sqlite3
 import logging
+
+import mysql.connector
+
 from project0employee import database
 
 logger = logging.getLogger(__name__)
@@ -7,8 +10,8 @@ logger = logging.getLogger(__name__)
 
 def create_employee():
     #Connects to database
-    conn = sqlite3.connect(database.DB_PATH)
-    c = conn.cursor()
+    conn = database.DB_Connection
+    c = conn.cursor(prepared=True)
 
     #make sure username is unique username######################
 
@@ -25,12 +28,10 @@ def create_employee():
         """, (username, password, "employee"))
 
         conn.commit()
-        conn.close()
         logger.info('User created successfully')
-    except sqlite3.IntegrityError:
+    except mysql.connector.errors.Error as e:
         #throw an exception if username exists in table
         print("Username already exists!")
-        logger.error('User creation failed')
-        conn.close()
+        logger.error('User creation failed', e.msg)
         return
 

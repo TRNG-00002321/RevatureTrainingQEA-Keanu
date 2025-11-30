@@ -15,13 +15,12 @@ def login():
     password = input("Password: ")
 
     #connect to database
-    conn = sqlite3.connect(database.DB_PATH)
-    c = conn.cursor()
+    conn = database.DB_Connection
+    c = conn.cursor(prepared=True)
 
     #find user from users table
     c.execute("SELECT id, username FROM users WHERE username=? AND password=?", (username, password))
     user = c.fetchone()
-    conn.close()
 
     #Returns user id if successful
     if user:

@@ -1,4 +1,5 @@
 import sqlite3
+import mysql.connector
 import database
 import datetime
 import pandas as pd
@@ -25,8 +26,8 @@ def AddExpense(user_id):
     date = datetime.date.today().isoformat()
 
     #connect to database
-    conn = sqlite3.connect(database.DB_PATH)
-    c = conn.cursor()
+    conn = database.DB_Connection
+    c = conn.cursor(prepared=True)
 
     #create new expense and insert into table
     try:
@@ -38,10 +39,7 @@ def AddExpense(user_id):
     except sqlite3.IntegrityError:
         logger.error("Database query error")
         print("Amount must be > $500.")
-        conn.close()
         return
-
-
 
     #gets newly added expense id
     expense_id = c.lastrowid
@@ -53,14 +51,12 @@ def AddExpense(user_id):
             (expense_id, "pending", None, None, None)
         )
         logger.info("Approval added successfully!")
-    except sqlite3.IntegrityError:
-        logger.error("Database query error")
-        conn.close()
+    except mysql.connector.errors.Error as e:
+        logger.error("Database query error", e.msg)
         return
 
 
     conn.commit()
-    conn.close()
     print("Expense added successfully.")
 
 ###################################################################################################
@@ -69,8 +65,8 @@ def ViewExpenses(user_id):
     print("\n=== Your Expenses ===")
 
     #connect to database
-    conn = sqlite3.connect(database.DB_PATH)
-    c = conn.cursor()
+    conn = database.DB_Connection
+    c = conn.cursor(prepared=True)
 
     try:
         #select rows from expenses joined with approval status
@@ -82,14 +78,12 @@ def ViewExpenses(user_id):
                 WHERE user_id=?
                 """, (user_id,))
         logger.info("Database query successful")
-    except sqlite3.IntegrityError:
-        logger.error("Database query error")
-        conn.close()
+    except mysql.connector.errors.Error as e:
+        logger.error("Database query error", e.msg)
         return
 
     #Get all rows
     rows = c.fetchall()
-    conn.close()
 
     #If no expenses found from user
     if not rows:
@@ -109,6 +103,8 @@ def ViewExpenses(user_id):
 
         print(df)
 
+###################################################################################################
+
 def EditExpense(user_id):
 
     #Get user input
@@ -116,8 +112,8 @@ def EditExpense(user_id):
     expense_id = input("Expense ID to edit: ")
 
     #connect to database
-    conn = sqlite3.connect(database.DB_PATH)
-    c = conn.cursor()
+    conn = database.DB_Connection
+    c = conn.cursor(prepared=True)
 
     #check ownership & pending
     try:
@@ -129,15 +125,13 @@ def EditExpense(user_id):
         """, (expense_id, user_id))
 
         logger.info("Database query successful")
-    except sqlite3.DatabaseError:
-        logger.error("Database query error")
-        conn.close()
+    except mysql.connector.errors.Error as e:
+        logger.error("Database query error", e.msg)
         return
 
     #checks if any pending expenses were found
     if not c.fetchone():
         print("No editable pending expense found with that ID.")
-        conn.close()
         return
 
     #tries to get new amount from user input
@@ -145,7 +139,6 @@ def EditExpense(user_id):
         new_amount = float(input("New Amount: "))
     except ValueError:
         print("Invalid amount.")
-        conn.close()
         return
 
     #gets new description from user input
@@ -158,14 +151,14 @@ def EditExpense(user_id):
             SET amount=?, description=?
             WHERE id=?
         """, (new_amount, new_description, expense_id))
-    except sqlite3.DatabaseError:
-        logger.error("Database query error")
-        conn.close()
+    except mysql.connector.errors.Error as e:
+        logger.error("Database query error", e.msg)
         return
 
     conn.commit()
-    conn.close()
     print("Expense updated successfully!")
+
+###################################################################################################
 
 def DeleteExpense(user_id):
 
@@ -174,8 +167,8 @@ def DeleteExpense(user_id):
     expense_id = input("Expense ID to delete: ")
 
     #connect to database
-    conn = sqlite3.connect(database.DB_PATH)
-    c = conn.cursor()
+    conn = database.DB_Connection
+    c = conn.cursor(prepared=True)
 
     try:
         #check ownership & pending
@@ -186,15 +179,13 @@ def DeleteExpense(user_id):
             WHERE expenses.id=? AND user_id=? AND approvals.status='pending'
         """, (expense_id, user_id))
         logger.info("Database query successful")
-    except sqlite3.DatabaseError:
-        logger.error("Database query error")
-        conn.close()
+    except mysql.connector.errors.Error as e:
+        logger.error("Database query error", e.msg)
         return
 
     #checks if any pending expenses were found
     if not c.fetchone():
         print("No pending expenses found with that ID.")
-        conn.close()
         return
 
     try:
@@ -202,20 +193,20 @@ def DeleteExpense(user_id):
         c.execute("DELETE FROM approvals WHERE expense_id=?", expense_id)
         c.execute("DELETE FROM expenses WHERE id=?", expense_id)
         logger.info("Database query successful")
-    except sqlite3.DatabaseError:
-        logger.error("Database query error")
-        conn.close()
+    except mysql.connector.errors.Error as e:
+        logger.error("Database query error", e.msg)
         return
 
     conn.commit()
-    conn.close()
+
+###################################################################################################
 
 def ViewExpenseHistory(user_id):
     print("\n=== View Expense History ===")
 
     #connects to database
-    conn = sqlite3.connect(database.DB_PATH)
-    c = conn.cursor()
+    conn = database.DB_Connection
+    c = conn.cursor(prepared=True)
 
     try:
         #Selects rows that from expenses that are not pending
@@ -227,14 +218,12 @@ def ViewExpenseHistory(user_id):
                 ORDER BY expenses.date
         """, (user_id,))
         logger.info("Database query successful")
-    except sqlite3.DatabaseError:
-        logger.error("Database query error")
-        conn.close()
+    except mysql.connector.errors.Error as e:
+        logger.error("Database query error", e.msg)
         return
 
     #gets rows list
     rows = c.fetchall()
-    conn.close()
 
     #if no rows found then return
     if not rows:
