@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionUtil {
-    private static Connection connection;
+    private Connection connection;
     private final Logger logger = LoggerFactory.getLogger(ConnectionUtil.class);
 
     //Private constructor for singleton class

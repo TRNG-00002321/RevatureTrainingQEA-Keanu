@@ -20,13 +20,6 @@ public class Expenses {
         this.date = date;
     }
 
-    public Expenses(int user_id, double amount, String description, LocalDateTime date) {
-        this.user_id = user_id;
-        this.amount = amount;
-        this.description = description;
-        this.date = date;
-    }
-
     public int getId() {
         return id;
     }

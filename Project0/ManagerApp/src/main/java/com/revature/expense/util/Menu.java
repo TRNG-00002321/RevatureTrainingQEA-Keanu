@@ -26,8 +26,7 @@ public class Menu {
 
             switch (input){
                 case 1:
-                    usersService.Login();
-                    exitLoop = true;
+                    exitLoop = usersService.Login();
                     break;
                 case 2:
                     usersService.CreateAccount();

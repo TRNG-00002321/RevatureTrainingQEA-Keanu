@@ -27,6 +27,7 @@ public class ExpensesServiceImpl implements ExpensesService{
         System.out.println("======Deny Expenses======");
         System.out.println("Enter expense ID: ");
         int expense_id = sc.nextInt();
+        sc.nextLine();
 
         int manager_id;
         if (UsersServiceImpl.getManager() != null) {
@@ -52,6 +53,7 @@ public class ExpensesServiceImpl implements ExpensesService{
         System.out.println("======Approve Expenses======");
         System.out.println("Enter expense ID: ");
         int expense_id = sc.nextInt();
+        sc.nextLine();
 
         int manager_id;
         if (UsersServiceImpl.getManager() != null) {

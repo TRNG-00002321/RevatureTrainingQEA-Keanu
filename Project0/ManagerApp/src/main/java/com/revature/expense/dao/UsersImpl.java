@@ -5,14 +5,11 @@ import com.revature.expense.util.ConnectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class UsersImpl implements UsersDAO{
     //Get singleton connection utility class
-    private static final ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
+    private final ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
     private final Logger logger = LoggerFactory.getLogger(UsersImpl.class);
 
     //Add new user to Users table
@@ -20,7 +17,7 @@ public class UsersImpl implements UsersDAO{
     public void addUser(String username, String password){
         PreparedStatement preparedStatement = null;
 
-        try(Connection conn = connectionUtil.getConnection()){
+        try(Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/expensesDB", "root", "ppp444")){
 
             //create an insert statement
             String query = "INSERT INTO users (username, password, role) VALUES(?,?,?)";
@@ -33,7 +30,6 @@ public class UsersImpl implements UsersDAO{
 
             //Execute then close statement
             preparedStatement.execute();
-            preparedStatement.close();
         }catch (SQLException e){
             System.out.println("Account creation failed!");
             logger.error("User not found:{}", e.getMessage());
@@ -48,7 +44,7 @@ public class UsersImpl implements UsersDAO{
         Users user = null;
 
         //Connect to database
-        try(Connection conn = connectionUtil.getConnection()) {
+        try(Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/expensesDB", "root", "ppp444")) {
             String query = "SELECT * FROM users " +
                             "WHERE username LIKE ? AND password LIKE ?";
 
@@ -68,6 +64,7 @@ public class UsersImpl implements UsersDAO{
             //return user object
             return user;
         } catch (SQLException e) {
+            System.out.println("Invalid Login");
             logger.warn("User not found:{}", e.getMessage());
         }
 

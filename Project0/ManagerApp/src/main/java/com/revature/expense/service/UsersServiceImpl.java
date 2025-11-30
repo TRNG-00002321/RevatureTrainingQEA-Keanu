@@ -14,7 +14,7 @@ public class UsersServiceImpl implements UsersService{
     private final Logger logger = LoggerFactory.getLogger(UsersServiceImpl.class);
 
     @Override
-    public void Login() {
+    public boolean Login() {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("======Log In======");
@@ -29,10 +29,12 @@ public class UsersServiceImpl implements UsersService{
         if(manager != null){
             System.out.println("Login Successful");
             logger.info("User: {} Logged in", manager.getUsername());
+            return true;
         }
         else{
             System.out.println("Incorrect Login Credentials");
             logger.info("User login failed");
+            return false;
         }
     }
 

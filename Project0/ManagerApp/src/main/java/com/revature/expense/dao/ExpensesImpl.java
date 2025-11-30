@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ExpensesImpl implements ExpensesDAO{
     //Get singleton connection utility class
-    private static final ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
+    private final ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
     private final Logger logger = LoggerFactory.getLogger(ExpensesImpl.class);
 
     @Override
@@ -21,8 +21,8 @@ public class ExpensesImpl implements ExpensesDAO{
         ResultSet resultSet = null;
         List<Expenses> expensesList = new ArrayList<>();
 
-        try(Connection conn = connectionUtil.getConnection()){
-            String query = "SELECT expenses.id, amount, description, expenses.date " +
+        try(Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/expensesDB", "root", "ppp444")){
+            String query = "SELECT expenses.id, expenses.user_id, amount, description, expenses.date " +
                     "FROM expenses " +
                     "JOIN approvals " +
                     "ON expenses.id = approvals.expense_id " +
@@ -33,7 +33,7 @@ public class ExpensesImpl implements ExpensesDAO{
             resultSet = preparedStatement.executeQuery();
 
             while(resultSet.next()){
-                expensesList.add(new Expenses(resultSet.getInt("id"), resultSet.getDouble("amount"),
+                expensesList.add(new Expenses(resultSet.getInt("id"), resultSet.getInt("user_id"), resultSet.getDouble("amount"),
                                 resultSet.getString("description"), resultSet.getObject("date", LocalDateTime.class)));
             }
 
@@ -49,7 +49,7 @@ public class ExpensesImpl implements ExpensesDAO{
     public void denyExpense(int expense_id, int manager_id, String comment){
         PreparedStatement preparedStatement = null;
 
-        try(Connection conn = connectionUtil.getConnection()){
+        try(Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/expensesDB", "root", "ppp444")){
             String query = "UPDATE approvals SET status = ?, reviewer = ?, comment = ?, review_date = ? " +
                            "WHERE expense_id = ?";
 
@@ -62,7 +62,6 @@ public class ExpensesImpl implements ExpensesDAO{
             preparedStatement.setInt(5, expense_id);
 
             preparedStatement.executeUpdate();
-            preparedStatement.close();
             logger.info("Denied expense:{}", expense_id);
         }catch (SQLException e){
             logger.error("Deny expense failed:{}", e.getMessage());
@@ -73,7 +72,7 @@ public class ExpensesImpl implements ExpensesDAO{
     public void approveExpense(int expense_id, int manager_id, String comment){
         PreparedStatement preparedStatement = null;
 
-        try(Connection conn = connectionUtil.getConnection()){
+        try(Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/expensesDB", "root", "ppp444")){
             String query = "UPDATE approvals SET status = ?, reviewer = ?, comment = ?, review_date = ? " +
                     "WHERE expense_id = ?";
 
@@ -86,7 +85,6 @@ public class ExpensesImpl implements ExpensesDAO{
             preparedStatement.setInt(5, expense_id);
 
             preparedStatement.executeUpdate();
-            preparedStatement.close();
             logger.info("Approved expense:{}", expense_id);
         }catch (SQLException e){
             logger.error("Approve expense failed:{}", e.getMessage());
