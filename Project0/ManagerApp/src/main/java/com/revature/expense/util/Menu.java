@@ -14,16 +14,23 @@ public class Menu {
     public static void DisplayMenu(){
         Scanner sc = new Scanner(System.in);
 
+        //user input
         int input = 0;
+        //bool for exiting while loop
         boolean exitLoop = false;
+
         do{
+            //print menu to screen
             System.out.println("======Manager App======");
             System.out.println("1. Login");
             System.out.println("2. Create Account");
             System.out.println("3. Quit");
             System.out.println("Enter option: ");
+
+            //get user input
             input = sc.nextInt();
 
+            //routes user input to correct service function
             switch (input){
                 case 1:
                     exitLoop = usersService.Login();
@@ -42,14 +49,18 @@ public class Menu {
         }while(!exitLoop);
 
         do{
+            //print menu to screen
             System.out.println("======Manager App Menu======");
             System.out.println("1. View Pending Expenses");
             System.out.println("2. Approve Expense");
             System.out.println("3. Deny Expense");
             System.out.println("4. Quit");
             System.out.println("Enter option: ");
+
+            //get user input
             input = sc.nextInt();
 
+            //routes user input to correct service function
             switch (input){
                 case 1:
                     expensesService.ViewExpenses();
