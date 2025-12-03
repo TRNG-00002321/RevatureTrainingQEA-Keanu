@@ -31,7 +31,7 @@ public class UsersImpl implements UsersDAO{
             //Execute then close statement
             preparedStatement.execute();
         }catch (SQLException e){
-            System.out.println("Account creation failed!");
+            System.out.println("Account creation failed: Username must be unique");
             logger.error("User not found:{}", e.getMessage());
         }
     }

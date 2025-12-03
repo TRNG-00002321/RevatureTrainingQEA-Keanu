@@ -16,9 +16,14 @@ public class ExpensesServiceImpl implements ExpensesService{
 
         System.out.println("======Pending Expenses======");
 
-        //print all pending expenses to screen
-        for(Expenses expense : expensesList){
-            System.out.println(expense);
+        if(expensesList.isEmpty()){
+            System.out.println("No pending expenses found...");
+        }
+        else{
+            //print all pending expenses to screen
+            for(Expenses expense : expensesList){
+                System.out.println(expense);
+            }
         }
     }
 
@@ -47,8 +52,12 @@ public class ExpensesServiceImpl implements ExpensesService{
         String comment = sc.nextLine();
 
         //deny expense
-        expensesDAO.denyExpense(expense_id, manager_id, comment);
-        System.out.println("Expense Denied");
+        if(expensesDAO.denyExpense(expense_id, manager_id, comment)){
+            System.out.println("Expense Denied");
+        }
+        else{
+            System.out.println("No expense found with that ID");
+        }
 
     }
 
@@ -77,7 +86,30 @@ public class ExpensesServiceImpl implements ExpensesService{
         String comment = sc.nextLine();
 
         //approve expense
-        expensesDAO.approveExpense(expense_id, manager_id, comment);
-        System.out.println("Expense Approved");
+        if(expensesDAO.approveExpense(expense_id, manager_id, comment)){
+            System.out.println("Expense Approved");
+        }
+        else{
+            System.out.println("No expense found with that ID");
+        }
+
+    }
+
+    @Override
+    public void ViewExpenseReport() {
+        //Get list of pending expenses
+        List<Expenses> expensesList = expensesDAO.getExpensesReport();
+
+        System.out.println("======Expenses Report by Amount======");
+
+        if(expensesList.isEmpty()){
+            System.out.println("No expenses found...");
+        }
+        else{
+            //print all pending expenses to screen
+            for(Expenses expense : expensesList){
+                System.out.println(expense);
+            }
+        }
     }
 }

@@ -52,7 +52,7 @@ public class ExpensesImpl implements ExpensesDAO{
     }
 
     @Override
-    public void denyExpense(int expense_id, int manager_id, String comment){
+    public boolean denyExpense(int expense_id, int manager_id, String comment){
         PreparedStatement preparedStatement = null;
 
         //connect to database
@@ -71,15 +71,22 @@ public class ExpensesImpl implements ExpensesDAO{
             preparedStatement.setInt(5, expense_id);
 
             //execute query
-            preparedStatement.executeUpdate();
-            logger.info("Denied expense:{}", expense_id);
+            if(preparedStatement.executeUpdate() != 0){
+                logger.info("Denied expense:{}", expense_id);
+                return true;
+            }
+            else{
+                logger.info("No expenses updated with ID:{}", expense_id);
+                return false;
+            }
         }catch (SQLException e){
             logger.error("Deny expense failed:{}", e.getMessage());
+            return false;
         }
     }
 
     @Override
-    public void approveExpense(int expense_id, int manager_id, String comment){
+    public boolean approveExpense(int expense_id, int manager_id, String comment){
         PreparedStatement preparedStatement = null;
 
         //connect to database
@@ -98,10 +105,56 @@ public class ExpensesImpl implements ExpensesDAO{
             preparedStatement.setInt(5, expense_id);
 
             //execute query
-            preparedStatement.executeUpdate();
-            logger.info("Approved expense:{}", expense_id);
-        }catch (SQLException e){
-            logger.error("Approve expense failed:{}", e.getMessage());
+            if(preparedStatement.executeUpdate() != 0){
+                logger.info("Approved expense:{}", expense_id);
+                return true;
+            }
+            else{
+                //noinspection LoggingSimilarMessage
+                logger.info("No expenses updated with ID:{}", expense_id);
+                return false;
+            }
         }
+        catch (SQLException e){
+            logger.error("Approve expense failed:{}", e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public List<Expenses> getExpensesReport() {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<Expenses> expensesList = new ArrayList<>();
+
+        //Get connection to database
+        try(Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/expensesDB", "root", "ppp444")){
+
+            //SELECT query to get pending expenses data
+            String query = "SELECT expenses.id, expenses.user_id, amount, description, expenses.date, approvals.status " +
+                    "FROM expenses " +
+                    "JOIN approvals " +
+                    "ON expenses.id = approvals.expense_id " +
+                    "ORDER BY expenses.amount DESC";
+
+            //execute prepared statement
+            preparedStatement = conn.prepareStatement(query);
+
+            resultSet = preparedStatement.executeQuery();
+
+            //adds results to expenses list
+            while(resultSet.next()){
+                expensesList.add(new Expenses(resultSet.getInt("id"), resultSet.getInt("user_id"), resultSet.getDouble("amount"),
+                        resultSet.getString("description"), resultSet.getObject("date", LocalDateTime.class),
+                        resultSet.getString("status")));
+            }
+
+            logger.info("Expenses Report query successful");
+        }catch (SQLException e){
+            logger.error("No expenses found in ExpensesReport:{}", e.getMessage());
+        }
+
+        //return list of expenses
+        return expensesList;
     }
 }

@@ -1,15 +1,20 @@
 package com.revature.expense.util;
 
+import com.revature.expense.dao.ExpensesImpl;
 import com.revature.expense.service.ExpensesService;
 import com.revature.expense.service.ExpensesServiceImpl;
 import com.revature.expense.service.UsersService;
 import com.revature.expense.service.UsersServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Menu {
     private static final ExpensesService expensesService = new ExpensesServiceImpl();
     private static final UsersService usersService = new UsersServiceImpl();
+    private static final Logger logger = LoggerFactory.getLogger(Menu.class);
 
     public static void DisplayMenu(){
         Scanner sc = new Scanner(System.in);
@@ -27,8 +32,14 @@ public class Menu {
             System.out.println("3. Quit");
             System.out.println("Enter option: ");
 
-            //get user input
-            input = sc.nextInt();
+            try{
+                //get user input
+                input = sc.nextInt();
+            }catch (InputMismatchException e){
+                logger.error("Invalid user input in Login screen:{}", e.getMessage());
+                System.out.println("Invalid input- Exiting Application...");
+                return;
+            }
 
             //routes user input to correct service function
             switch (input){
@@ -52,13 +63,20 @@ public class Menu {
             //print menu to screen
             System.out.println("======Manager App Menu======");
             System.out.println("1. View Pending Expenses");
-            System.out.println("2. Approve Expense");
-            System.out.println("3. Deny Expense");
-            System.out.println("4. Quit");
+            System.out.println("2. Generate Expense Report by Amount");
+            System.out.println("3. Approve Expense");
+            System.out.println("4. Deny Expense");
+            System.out.println("5. Quit");
             System.out.println("Enter option: ");
 
-            //get user input
-            input = sc.nextInt();
+            try{
+                //get user input
+                input = sc.nextInt();
+            }catch (InputMismatchException e){
+                logger.error("Invalid user input in Main Menu:{}", e.getMessage());
+                System.out.println("Invalid input- Exiting Application...");
+                return;
+            }
 
             //routes user input to correct service function
             switch (input){
@@ -66,12 +84,15 @@ public class Menu {
                     expensesService.ViewExpenses();
                     break;
                 case 2:
-                    expensesService.ApproveExpense();
+                    expensesService.ViewExpenseReport();
                     break;
                 case 3:
-                    expensesService.DenyExpense();
+                    expensesService.ApproveExpense();
                     break;
                 case 4:
+                    expensesService.DenyExpense();
+                    break;
+                case 5:
                     System.out.println("Quitting Application...");
                     return;
                 default:

@@ -8,6 +8,7 @@ public class Expenses {
     private double amount;          //Expense amount(must be at least $500
     private String description;     //Reason for expense request
     private LocalDateTime date;     //Date of expense
+    private String status;          //approved,denied,pending
 
     public Expenses() {
     }
@@ -18,10 +19,28 @@ public class Expenses {
         this.amount = amount;
         this.description = description;
         this.date = date;
+        this.status = "pending";
+    }
+
+    public Expenses(int id, int user_id, double amount, String description, LocalDateTime date, String status) {
+        this.id = id;
+        this.user_id = user_id;
+        this.amount = amount;
+        this.description = description;
+        this.date = date;
+        this.status = status;
     }
 
     public int getId() {
         return id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public void setId(int id) {
@@ -67,7 +86,8 @@ public class Expenses {
                 ", user_id=" + user_id +
                 ", amount=" + amount +
                 ", description='" + description + '\'' +
-                ", date='" + date + '\'' +
+                ", date=" + date +
+                ", status='" + status + '\'' +
                 '}';
     }
 }
