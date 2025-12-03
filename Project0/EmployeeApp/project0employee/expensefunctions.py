@@ -1,7 +1,6 @@
-import sqlite3
 import mysql.connector
 import database
-import datetime
+from datetime import datetime
 import pandas as pd
 import logging
 logger = logging.getLogger(__name__)
@@ -23,7 +22,7 @@ def AddExpense(user_id):
     description = input("Description: ")
 
     #Get today's date
-    date = datetime.date.today().isoformat()
+    date = datetime.now()
 
     #connect to database
     conn = database.DB_Connection
