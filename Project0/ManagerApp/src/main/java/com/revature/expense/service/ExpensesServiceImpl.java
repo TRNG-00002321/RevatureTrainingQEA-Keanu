@@ -2,13 +2,17 @@ package com.revature.expense.service;
 
 import com.revature.expense.dao.ExpensesImpl;
 import com.revature.expense.model.Expenses;
+import tech.tablesaw.api.*;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Scanner;
 
 public class ExpensesServiceImpl implements ExpensesService{
     private final ExpensesImpl expensesDAO = new ExpensesImpl();
     @Override
+    @SuppressWarnings("removal")
     public void ViewExpenses() {
 
         //Get list of pending expenses
@@ -20,10 +24,25 @@ public class ExpensesServiceImpl implements ExpensesService{
             System.out.println("No pending expenses found...");
         }
         else{
-            //print all pending expenses to screen
+            //Create table columns
+            IntColumn expense_id = IntColumn.create("Expense ID");
+            IntColumn user_id = IntColumn.create("User ID");
+            DoubleColumn amount = DoubleColumn.create("Amount");
+            StringColumn description = StringColumn.create("Description");
+            DateTimeColumn date = DateTimeColumn.create("Date");
+
+            //add data from expense list to columns
             for(Expenses expense : expensesList){
-                System.out.println(expense);
+                expense_id.append(expense.getId());
+                user_id.append(expense.getUser_id());
+                amount.append(expense.getAmount());
+                description.append(expense.getDescription());
+                date.append(expense.getDate());
             }
+
+            //create table and print to screen
+            Table expensesTable = Table.create().addColumns(expense_id,user_id,amount,description,date);
+            System.out.println(expensesTable.print());
         }
     }
 
@@ -106,10 +125,27 @@ public class ExpensesServiceImpl implements ExpensesService{
             System.out.println("No expenses found...");
         }
         else{
-            //print all pending expenses to screen
+            //create table columns
+            IntColumn expense_id = IntColumn.create("Expense ID");
+            IntColumn user_id = IntColumn.create("User ID");
+            DoubleColumn amount = DoubleColumn.create("Amount");
+            StringColumn description = StringColumn.create("Description");
+            DateTimeColumn date = DateTimeColumn.create("Date");
+            StringColumn status = StringColumn.create("Status");
+
+            //add expenses data to columns
             for(Expenses expense : expensesList){
-                System.out.println(expense);
+                expense_id.append(expense.getId());
+                user_id.append(expense.getUser_id());
+                amount.append(expense.getAmount());
+                description.append(expense.getDescription());
+                date.append(expense.getDate());
+                status.append(expense.getStatus());
             }
+
+            //creat table and print to screen
+            Table expensesTable = Table.create().addColumns(expense_id,user_id,amount,description,date,status);
+            System.out.println(expensesTable.print());
         }
     }
 }
