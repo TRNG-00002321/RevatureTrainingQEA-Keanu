@@ -209,7 +209,7 @@ def ViewExpenseHistory(user_id):
     try:
         #Selects rows that from expenses that are not pending
         c.execute("""
-            SELECT expenses.id, amount, description, expenses.date, approvals.status
+            SELECT expenses.id, amount, description, expenses.date, approvals.status, approvals.comment
             FROM expenses
                 JOIN approvals ON expenses.id = approvals.expense_id
                 WHERE user_id=? AND approvals.status != 'pending'
@@ -234,7 +234,7 @@ def ViewExpenseHistory(user_id):
     pd.set_option('display.max_rows', None)
 
     #display rows as dataframe
-    column_names = ["ID", "Amount", "Description", "Date", "Status"]
+    column_names = ["ID", "Amount", "Description", "Date", "Status", "Comment"]
     df = pd.DataFrame(rows, columns=column_names).set_index('ID')
     df.sort_values(by=['Date'], inplace=True)
 
