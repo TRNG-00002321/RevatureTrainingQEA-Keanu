@@ -1,6 +1,7 @@
 from project0employee.login import login
 from project0employee.menu import menu
 from project0employee.prelogin import pre_login
+import database
 import logging
 
 
@@ -21,6 +22,10 @@ def main():
 
         if user_id:
             running = menu(user_id)
+
+    database.DB_Connection.close()
+
+
 
 if __name__ == "__main__":
     main()

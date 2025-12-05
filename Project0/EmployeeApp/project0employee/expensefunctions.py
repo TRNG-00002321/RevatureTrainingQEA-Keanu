@@ -196,6 +196,7 @@ def DeleteExpense(user_id):
         return
 
     conn.commit()
+    print("Expense Deleted")
 
 ###################################################################################################
 
