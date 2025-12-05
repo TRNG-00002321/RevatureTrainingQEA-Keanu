@@ -189,10 +189,10 @@ def DeleteExpense(user_id):
 
     try:
         #delete expenses that have expense id from approvals and expenses tables
-        c.execute("DELETE FROM expenses WHERE id=?", expense_id)
+        c.execute("DELETE FROM expenses WHERE id=?", (expense_id,))
         logger.info("Database query successful")
     except mysql.connector.errors.Error as e:
-        logger.error("Database query error", e.msg)
+        logger.error("Database delete query error", e.msg)
         return
 
     conn.commit()
