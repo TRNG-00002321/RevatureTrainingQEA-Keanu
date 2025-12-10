@@ -9,17 +9,23 @@ public class StringUtilsTests {
     @Test
     public void testReverse(){
         //Arrange
-        String test = "Cat";
+        String test1 = "hello";
+        String test2 = "a";
+        String test3 = "";
 
         //Act
-        test = StringUtils.reverse(test);
+        test1 = StringUtils.reverse(test1);
+        test2 = StringUtils.reverse(test2);
+        test3 = StringUtils.reverse(test3);
 
         //Assert
-        assertEquals("taC", test);
+        assertEquals("olleh", test1);
+        assertEquals("a", test2);
+        assertEquals("", test3);
     }
 
     @Test
-    public void testIsEmpty(){
+    public void testIsEmpty_positive(){
         //Arrange
         String test = null;
         boolean isEmpty;
@@ -32,7 +38,20 @@ public class StringUtilsTests {
     }
 
     @Test
-    public void testFindFirst(){
+    public void testIsEmpty_negative(){
+        //Arrange
+        String test = "This list is not empty";
+        boolean isEmpty;
+
+        //Act
+        isEmpty = StringUtils.isEmpty(test);
+
+        //Assert
+        assertFalse(isEmpty);
+    }
+
+    @Test
+    public void testFindFirst_notNull(){
         //Arrange
         String[] test = {"Find", "First", "Test"};
         String prefix = "First";
@@ -42,7 +61,21 @@ public class StringUtilsTests {
         result = StringUtils.findFirst(test, prefix);
 
         //Assert
-        assertEquals(prefix, result);
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testFindFirst_Null(){
+        //Arrange
+        String[] test = {"Find", "First", "Test"};
+        String prefix = "Second";
+        String result;
+
+        //Act
+        result = StringUtils.findFirst(test, prefix);
+
+        //Assert
+        assertNull(result);
     }
 
     @Test
@@ -59,16 +92,16 @@ public class StringUtilsTests {
     }
 
     @Test
-    public void testValidateUser(){
-        //Arrange
-        String csv = "Keanu,Cendejas,5,password";
-        User user;
+    void user_allPropertiesValid() {
+        User user = StringUtils.parseUser("John,Doe,30,john@test.com");
 
-        //Act
-        user = StringUtils.parseUser(csv);
-
-        //Assert
-        assertNotNull(user);
+        assertAll("User properties",
+                () -> assertEquals("John", user.getFirstName()),
+                () -> assertEquals("Doe", user.getLastName()),
+                () -> assertEquals(30, user.getAge()),
+                () -> assertNotNull(user.getEmail()),
+                () -> assertTrue(user.getEmail().contains("@"))
+        );
     }
 
 
