@@ -1,5 +1,7 @@
 package com.revature.first_junit_tests;
 
+import static java.lang.Math.pow;
+
 public class Calculator {
     public int add(int a, int b) {
         return a + b;
@@ -18,6 +20,10 @@ public class Calculator {
             throw new ArithmeticException("Cannot divide by zero");
         }
         return a / b;
+    }
+
+    public int power(int a, int b){
+        return (int)pow(a, b);
     }
 
     public boolean isEven(int number) {
