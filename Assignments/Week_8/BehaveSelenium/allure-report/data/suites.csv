@@ -1,0 +1,6 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","6377","Allure report login","","2025-12-26","passed","2025-12-26","","","",""
+"","6171","Invalid username shows error","","2025-12-26","passed","2025-12-26","","","",""
+"","6970","Invalid password shows error","","2025-12-26","passed","2025-12-26","","","",""
+"","6547","Logout returns to login page","","2025-12-26","passed","2025-12-26","","","",""
+"","7850","Successful login redirects to secure area","","2025-12-26","passed","2025-12-26","","","",""

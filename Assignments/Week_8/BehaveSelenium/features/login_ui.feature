@@ -15,6 +15,11 @@ Feature: Login UI Tests
     Then I should be on the secure area page
     And I should see message containing "You logged into"
 
+  @positive
+  Scenario: Allure report login
+    When the user logs in with "tomsmith" and "SuperSecretPassword!"
+    Then the login should be successful
+
   @negative
   Scenario: Invalid password shows error
     When I enter username "tomsmith"
